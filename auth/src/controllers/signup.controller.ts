@@ -1,5 +1,7 @@
 //@ts-check
 import { RequestHandler } from "express";
+import { validationResult } from "express-validator";
+import { RequestValidationError } from "../errors";
 
 /**
  * signup a user controller
@@ -7,7 +9,12 @@ import { RequestHandler } from "express";
  * @param res
  */
 const signupController: RequestHandler = (req, res) => {
-    res.status(200).json({ status: "Signup" });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        throw new RequestValidationError(errors.array());
+    }
+
+    res.status(200).json({ status: "signup" });
 }
 
 export default signupController;
