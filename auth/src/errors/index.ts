@@ -1,5 +1,7 @@
+import NotFoundError from "./notFound";
 import RequestValidationError from "./requestValidationError";
 
 export {
-    RequestValidationError
+    RequestValidationError,
+    NotFoundError
 }
