@@ -1,34 +1,18 @@
 import { ErrorRequestHandler } from "express";
-import RequestValidationError from "../errors/requestValidationError";
-
-interface IErrorContent {
-    message: string;
-    field?: string;
-};
+import { CustomError } from "../errors/custom-error";
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-    let errors: IErrorContent[] = [];
-
-    if (err instanceof RequestValidationError) {
-        errors = err.errors.map(error => {
-            if (error.type === "field") {
-                return {
-                    message: error.msg,
-                    field: error.path
-                }
-            }
-            return {
-                message: error.msg
-            }
+    if (err instanceof CustomError) {
+        res.status(err.statusCode).json({
+            errors: err.serializeErrors()
         });
-    } else {
-        errors = [{
-            message: "Something went wrong"
-        }];
+        return;
     }
 
-    res.status(err.statusCode || 500).json({
-        errors
+    res.status(500).json({
+        errors: [{
+            message: "Something went wrong"
+        }]
     });
     return;
 };
