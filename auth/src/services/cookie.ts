@@ -7,6 +7,10 @@ interface ICreateCookie {
     res: Response;
 }
 
+interface IDestroyCookie {
+    cookieName: string;
+    res: Response;
+}
 export default class Cookie {
     static create(cookie: ICreateCookie) {
         cookie.res.cookie(
@@ -19,5 +23,12 @@ export default class Cookie {
                 expires: new Date(Date.now() + cookie.expiresInMs)
             }
         )
+    }
+
+    static destroy(cookie: IDestroyCookie) {
+        cookie.res.cookie(cookie.cookieName, null, {
+            httpOnly: true,
+            expires: new Date(Date.now())
+        });
     }
 }

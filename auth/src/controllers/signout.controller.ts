@@ -1,5 +1,6 @@
 //@ts-check
 import { RequestHandler } from "express";
+import { accessTokenManager } from "../helpers";
 
 /**
  * signout controller
@@ -7,7 +8,8 @@ import { RequestHandler } from "express";
  * @param res
  */
 const signoutController: RequestHandler = (req, res) => {
-    res.status(200).json({ status: "Signout" });
+    accessTokenManager.removeAccessToken(res);
+    res.status(200).json({});
 }
 
 export default signoutController;
