@@ -3,6 +3,7 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 import { BadRequestError, RequestValidationError } from "../errors";
 import { User } from "../models/user";
+import { Cookie, Jwt } from "../services";
 
 /**
  * signup a user controller
@@ -27,10 +28,29 @@ const signupController: RequestHandler = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({
+    const userPayload = {
         _id: user._id,
         email: user.email
+    };
+
+    const expiresInMs = 15 * 60 * 1000; // 15min
+
+    const token = Jwt.create({
+        payload: userPayload,
+        expiresInMs
     });
+
+    Cookie.create({
+        cookieName: "access_token",
+        expiresInMs,
+        token,
+        res
+    });
+
+    console.log(user);
+    
+
+    res.status(201).json(user);
 }
 
 export default signupController;
