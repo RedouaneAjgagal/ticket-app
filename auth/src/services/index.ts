@@ -1,9 +1,9 @@
 import Cookie from "./cookie";
 import Jwt from "./jwt";
-import Password from "./password";
+import PasswordManager from "./password-manager";
 
 export {
-    Password,
+    PasswordManager,
     Cookie,
     Jwt
 }
