@@ -7,7 +7,9 @@ import { RequestHandler } from "express";
  * @param res
  */
 const currentUserController: RequestHandler = (req, res) => {
-    res.status(200).json({ name: "RED" });
+    res.status(200).json({
+        user: req.user
+    });
 }
 
 export default currentUserController;

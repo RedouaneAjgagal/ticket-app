@@ -36,4 +36,8 @@ const accessTokenManager = {
     removeAccessToken
 }
 
+export type {
+    IUserPayload
+}
+
 export default accessTokenManager;

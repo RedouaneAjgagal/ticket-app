@@ -28,14 +28,12 @@ const signupController: RequestHandler = async (req, res) => {
 
     await user.save();
 
-    const userPayload = {
-        id: user.id,
-        email: user.email
-    };
-
     accessTokenManager.setAccessToken({
-        userPayload,
-        res
+        res,
+        userPayload: {
+            id: user.id,
+            email: user.email
+        }
     });
 
     res.status(201).json(user);

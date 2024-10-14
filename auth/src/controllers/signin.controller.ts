@@ -30,17 +30,15 @@ const signinController: RequestHandler = async (req, res) => {
         throw new BadRequestError("Invalid credentials");
     }
 
-    const userPayload = {
-        id: user.id,
-        email: user.email
-    }
-
     accessTokenManager.setAccessToken({
-        userPayload,
-        res
+        res,
+        userPayload: {
+            id: user.id,
+            email: user.email
+        }
     });
 
-    res.status(200).json(userPayload);
+    res.status(200).json(user);
 }
 
 export default signinController;

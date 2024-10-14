@@ -13,4 +13,9 @@ export default class Jwt {
 
         return token;
     }
+
+    static verify(token: string) {
+        const payload = jwt.verify(token, process.env.JWT_SECRET!);
+        return payload;
+    }
 }
