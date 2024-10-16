@@ -1,9 +1,10 @@
-import accessTokenManager, { IUserPayload } from "./accessTokenManager";
+import accessTokenManager, { IUserPayload, AUTHENTICATION_TOKEN_NAME } from "./accessTokenManager";
 
 export type {
     IUserPayload
 }
 
 export {
-    accessTokenManager
+    accessTokenManager,
+    AUTHENTICATION_TOKEN_NAME
 }

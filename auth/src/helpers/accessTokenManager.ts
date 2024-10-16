@@ -6,7 +6,7 @@ interface IUserPayload {
     email: string;
 }
 
-const AUTHENTICATION_TOKEN_NAME = "access_token";
+export const AUTHENTICATION_TOKEN_NAME = "access_token";
 
 const setAccessToken = ({ userPayload, res }: { userPayload: IUserPayload; res: Response }) => {
     const expiresInMs = 15 * 60 * 1000; // 15min
