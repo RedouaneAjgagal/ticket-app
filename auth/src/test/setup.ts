@@ -5,6 +5,9 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 let mongo: MongoMemoryServer;
 
 beforeAll(async () => {
+    // process.env.COOKIE_SECRET = "COOKIE_SECRET";
+    // process.env.JWT_SECRET = "JWT_SECRET";
+
     mongo = await MongoMemoryServer.create();
     const mongoUri = mongo.getUri();
 
@@ -13,7 +16,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
     if (mongoose.connection.db) {
-        const collections = await mongoose.connection.db?.collections();
+        const collections = await mongoose.connection.db.collections();
     
         for (let collection of collections) {
             await collection.deleteMany({});
