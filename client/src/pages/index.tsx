@@ -1,18 +1,6 @@
-import axios, { AxiosResponse } from "axios";
-import { GetServerSideProps } from "next";
-import { buildClient } from "../../api";
+import { ICurrentUser } from "./_app";
 
-interface CurrentUserResponse {
-  user: null | {
-    id: string;
-    email: string;
-    iat: number;
-    exp: number;
-  }
-}
-
-function Home(props: React.PropsWithoutRef<CurrentUserResponse>) {
-  console.log(props.user);
+function Home(props: React.PropsWithoutRef<ICurrentUser>) {
 
   return (
     <div>
@@ -31,14 +19,6 @@ function Home(props: React.PropsWithoutRef<CurrentUserResponse>) {
       }
     </div>
   );
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const client = buildClient(context);
-  const response: AxiosResponse<CurrentUserResponse> = await client.get("/api/users/current-user");
-  return {
-    props: response.data
-  };
 }
 
 export default Home;
