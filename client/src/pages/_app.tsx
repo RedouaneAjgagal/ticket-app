@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import App, { AppContext, AppInitialProps, AppProps } from "next/app";
-import { buildClient } from "../../api";
+import { buildClient } from "../api";
 import { AxiosResponse } from "axios";
 
 export interface ICurrentUser {
