@@ -1,7 +1,8 @@
 import "@/styles/globals.css";
 import App, { AppContext, AppInitialProps, AppProps } from "next/app";
-import { buildClient } from "../api";
+import { buildClient } from "@/api";
 import { AxiosResponse } from "axios";
+import { Navigation } from "@/components";
 
 export interface ICurrentUser {
   user: null | {
@@ -15,6 +16,9 @@ export interface ICurrentUser {
 const AppComponent = ({ Component, pageProps, user }: AppProps & ICurrentUser) => {
   return (
     <div>
+      <header>
+        <Navigation user={user} />
+      </header>
       <main className="max-w-[70rem] mx-auto">
         <Component {...{ ...pageProps, user }} />
       </main>
