@@ -1,10 +1,6 @@
 {
   "name": "@redagtickets/common",
-<<<<<<< HEAD
   "version": "1.0.2",
-=======
-  "version": "1.0.0",
->>>>>>> 2ae9f9f500d1ad47711825d75866d5b5807e09f8
   "main": "./build/index.js",
   "type": "module",
   "types": "./build/index.d.ts",
@@ -20,10 +16,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-<<<<<<< HEAD
-=======
-    "bcrypt": "^5.1.1",
->>>>>>> 2ae9f9f500d1ad47711825d75866d5b5807e09f8
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2"
   },
