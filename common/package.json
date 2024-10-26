@@ -2,7 +2,6 @@
   "name": "@redagtickets/common",
   "version": "1.0.2",
   "main": "./build/index.js",
-  "type": "module",
   "types": "./build/index.d.ts",
   "files": [
     "build/**/*"
