@@ -1,7 +1,7 @@
 //@ts-check
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
-import { BadRequestError, RequestValidationError } from "../errors";
+import { BadRequestError, RequestValidationError } from "@redagtickets/common";
 import { User } from "../models/user";
 import { PasswordManager } from "../services";
 import { accessTokenManager } from "../helpers";

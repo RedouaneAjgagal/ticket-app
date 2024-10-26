@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Cookie, Jwt } from "../services";
+import { Cookie, Jwt } from "@redagtickets/common";
 
 interface IUserPayload {
     id: string;
@@ -13,7 +13,8 @@ const setAccessToken = ({ userPayload, res }: { userPayload: IUserPayload; res: 
 
     const token = Jwt.create({
         payload: userPayload,
-        expiresInMs
+        expiresInMs,
+        jwtSecret: process.env.JWT_SECRET!
     });
 
     Cookie.create({
