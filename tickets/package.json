@@ -7,6 +7,13 @@
     "dev": "ts-node-dev --poll src/main.ts",
     "start": "npx tsc && node dist/main.ts"
   },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
