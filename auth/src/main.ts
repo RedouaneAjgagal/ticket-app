@@ -8,13 +8,13 @@ const start = async () => {
 
     try {
         await mongoose.connect("mongodb://auth-mongo-srv:27017/ticket-auth");
-        console.log("Mongo is connected!")
+        console.log("Auth mongo is connected!")
     } catch (error) {
         console.error(error)
     }
 
     app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
+        console.log(`Auth server is running on port ${port}`);
     });
 };
 
