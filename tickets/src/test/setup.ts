@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 import app from "../app";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import request from "supertest";
+import crypto from "crypto";
+import { Jwt } from "@redagtickets/common";
 
 declare global {
-    var signin: () => Promise<{
+    var signin: () => {
         cookie: string[];
         email: string;
-    }>;
+    };
 }
 
 let mongo: MongoMemoryServer;
@@ -36,24 +38,43 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-global.signin = async () => {
+
+const generateSignedCookie = (token: string) => {
+    const base64 = encodeURIComponent(token);
+
+    const signature = crypto
+        .createHmac("sha256", process.env.COOKIE_SECRET!)
+        .update(base64)
+        .digest("base64")
+        .replace(/\=+$/, '');
+
+    const signedCookie = `s%3A${base64}.${encodeURIComponent(signature)}`;
+    return signedCookie;
+}
+
+
+global.signin = () => {
     const userInformation = {
         email: "test@test.com",
         password: "password"
     }
 
-    const response = await request(app)
-        .post("/api/users/signup")
-        .send(userInformation)
-        .expect(201);
-
-    const cookie = response.get("Set-Cookie");
-    if (!cookie) {
-        throw new Error("Faild to get cookie from response");
+    const payload = {
+        id: "TEST_ID_1",
+        email: userInformation.email
     }
 
+    const expiresInMs = 15 * 60 * 1000;
+    const token = Jwt.create({
+        payload,
+        expiresInMs,
+        jwtSecret: process.env.JWT_SECRET!
+    });
+
+    const signedCookie = generateSignedCookie(token);
+
     return {
-        cookie,
+        cookie: [`access_token=${signedCookie}`],
         email: userInformation.email
     };
 }

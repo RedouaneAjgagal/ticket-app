@@ -6,6 +6,8 @@ import { RequestHandler } from "express";
  * @param res 
  */
 const createTicketController: RequestHandler = (req, res) => {
+    console.log(req.signedCookies);
+    
     res.sendStatus(201);
 };
 
