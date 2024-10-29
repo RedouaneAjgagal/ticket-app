@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { body, ValidationChain, validationResult } from "express-validator";
 import { RequestValidationError } from "../errors";
 
-const validateRequest = (validations: []) => {
+const validateRequest = (validations: ValidationChain[]) => {
     return [
         validations,
         (req: Request, res: Response, next: NextFunction) => {
