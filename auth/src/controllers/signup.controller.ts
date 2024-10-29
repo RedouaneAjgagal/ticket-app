@@ -1,7 +1,6 @@
 //@ts-check
 import { RequestHandler } from "express";
-import { validationResult } from "express-validator";
-import { BadRequestError, RequestValidationError } from "@redagtickets/common";
+import { BadRequestError } from "@redagtickets/common";
 import { User } from "../models/user";
 import { accessTokenManager } from "../helpers";
 
@@ -11,11 +10,6 @@ import { accessTokenManager } from "../helpers";
  * @param res
  */
 const signupController: RequestHandler = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        throw new RequestValidationError(errors.array());
-    }
-
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
