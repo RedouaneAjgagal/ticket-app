@@ -21,8 +21,50 @@ it("should not return a 401 if the user is signed in", async () => {
 
     const response = await request(app)
         .post("/api/tickets")
-        .send({})
-        .set("Cookie", cookie);
+        .set("Cookie", cookie)
+        .send({});
 
     expect(response.status).not.toEqual(401);
+});
+
+it("should throw an error if the ticket title is not provided", async () => {
+    const { cookie } = global.signin();
+
+    await request(app)
+        .post("/api/tickets")
+        .set("Cookie", cookie)
+        .send({
+            title: "",
+            price: 10
+        })
+        .expect(400);
+
+    await request(app)
+        .post("/api/tickets")
+        .set("Cookie", cookie)
+        .send({
+            price: 10
+        })
+        .expect(400);
+});
+
+it("should throw an error if the ticket price is invalid or not provided", async () => {
+    const { cookie } = global.signin();
+
+    await request(app)
+        .post("/api/tickets")
+        .set("Cookie", cookie)
+        .send({
+            title: "a ticket title",
+            price: -1
+        })
+        .expect(400);
+
+    await request(app)
+        .post("/api/tickets")
+        .set("Cookie", cookie)
+        .send({
+            title: "a ticket title"
+        })
+        .expect(400);
 });

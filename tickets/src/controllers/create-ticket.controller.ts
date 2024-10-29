@@ -1,4 +1,6 @@
+import { validationResult } from "express-validator";
 import { RequestHandler } from "express";
+import { RequestValidationError } from "@redagtickets/common";
 
 /**
  * create a new ticket controller
@@ -6,8 +8,6 @@ import { RequestHandler } from "express";
  * @param res 
  */
 const createTicketController: RequestHandler = (req, res) => {
-    console.log(req.signedCookies);
-    
     res.sendStatus(201);
 };
 
