@@ -9,10 +9,10 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         return;
     }
 
-    if (err && err.code === 1100) {
+    if (err && err.code === 11000) {
         res.status(400).json({
             errors: [{
-                message: "Duplicated value entered, please choose another value"
+                message: `Duplicate value entered for ${Object.keys(err.keyValue)} field, please choose another value`
             }]
         });
         return;
@@ -26,6 +26,8 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         });
         return;
     }
+
+    console.error(err);
 
     res.status(500).json({
         errors: [{
