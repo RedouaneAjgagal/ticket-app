@@ -9,10 +9,19 @@ const start = async () => {
     if (!process.env.MONGO_URI) throw new Error("Mongo URI is required");
 
     try {
+        await natsWrapper.connect("ticketing", "123", "http://nats-srv:4222");
+
+        // handle closing connection
+        natsWrapper.stan.on("close", () => {
+            console.log("NATS connection closed!");
+            process.exit();
+        });
+        process.on("SIGINT", () => natsWrapper.stan.close());
+        process.on("SIGTERM", () => natsWrapper.stan.close());
+
+
         await mongoose.connect(process.env.MONGO_URI);
         console.log("Tickets mongo is connected!");
-
-        natsWrapper.connect("ticketing", "123", "http://nats-srv:4222");
     } catch (error) {
         console.error(error);
     };
