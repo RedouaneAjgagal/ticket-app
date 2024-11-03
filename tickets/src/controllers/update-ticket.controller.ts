@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import { Ticket } from "../models";
 import mongoose from "mongoose";
 import { BadRequestError, UnauthenticatedError } from "@redagtickets/common";
+import TicketUpdatedPublisher from "../events/publishers/ticket-updated-publisher";
+import natsWrapper from "../nats-wrapper";
 
 
 /**
@@ -29,6 +31,13 @@ const updateTicketController: RequestHandler = async (req, res) => {
 
     ticket.set({ title, price });
     await ticket.save();
+
+    new TicketUpdatedPublisher(natsWrapper.stan).publish({
+        id: ticket.id,
+        title: ticket.title,
+        price: ticket.price,
+        userId: ticket.userId
+    });
 
     res.status(200).json(ticket);
 }
