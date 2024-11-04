@@ -1,6 +1,8 @@
 import request from "supertest";
 import app from "../../app";
 import mongoose from "mongoose";
+import natsWrapper from "../../nats-wrapper";
+import { Subjects } from "@redagtickets/common";
 
 const validInputs = {
     title: "a valid ticket title",
@@ -142,4 +144,29 @@ it("should update the ticket details", async () => {
 
     expect(getTicketResponse.body.title).toEqual(updatedTicketInputs.title);
     expect(getTicketResponse.body.price).toEqual(updatedTicketInputs.price);
+});
+
+it("should publish an updated ticket event", async () => {
+    const { cookie } = global.signin();
+
+    const createTicketResponse = await request(app)
+        .post("/api/tickets")
+        .set("Cookie", cookie)
+        .send(validInputs)
+        .expect(201);
+
+    const updatedTicketInputs = {
+        title: "updated ticket title",
+        price: 99
+    }
+
+    // updated ticket request
+    await request(app)
+        .put(`/api/tickets/${createTicketResponse.body.id}`)
+        .set("Cookie", cookie)
+        .send(updatedTicketInputs)
+        .expect(200);
+
+    expect(natsWrapper.stan.publish).toHaveBeenCalled();
+    expect(natsWrapper.stan.publish).toHaveBeenCalledWith(Subjects.TicketUpdated, expect.anything(), expect.anything());
 });

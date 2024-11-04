@@ -1,6 +1,6 @@
 const natsWrapper = {
     stan: {
-        publish: () => { }
+        publish: jest.fn().mockImplementation()
     }
 };
 
