@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-import app from "../app";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import request from "supertest";
 import crypto from "crypto";
 import { Jwt } from "@redagtickets/common";
 
@@ -12,8 +10,9 @@ declare global {
     };
 }
 
-let mongo: MongoMemoryServer;
+jest.mock("../nats-wrapper");
 
+let mongo: MongoMemoryServer;
 beforeAll(async () => {
     mongo = await MongoMemoryServer.create();
     const mongoUri = mongo.getUri();
