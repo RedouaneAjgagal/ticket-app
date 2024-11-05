@@ -23,6 +23,14 @@ build:
         manual:
           - dest: .
             src: 'src/**/*.ts'
+    - image: ajgagal/ticket-orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: 'src/**/*.ts'
     - image: ajgagal/ticket-client
       context: client
       docker:

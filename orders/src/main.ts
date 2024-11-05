@@ -28,7 +28,7 @@ const start = async () => {
 
 
         await mongoose.connect(process.env.MONGO_URI);
-        console.log("Tickets mongo is connected!");
+        console.log("Orders mongo is connected!");
     } catch (error) {
         console.error(error);
     };
