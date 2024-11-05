@@ -1,17 +1,18 @@
 import { OrderStatus } from "@redagtickets/common";
 import mongoose from "mongoose";
+import { TicketDoc } from "./ticket";
 
 interface OrderAttrs {
     userId: string;
     status: OrderStatus;
-    ticket: mongoose.Schema.Types.ObjectId;
+    ticket: TicketDoc;
 };
 
 interface OrderDoc extends mongoose.Document<mongoose.Types.ObjectId> {
     userId: string;
     status: OrderStatus;
     expiresAt: Date;
-    ticket: mongoose.Schema.Types.ObjectId;
+    ticket: TicketDoc;
     createdAt: string;
     updatedAt: string;
 };
