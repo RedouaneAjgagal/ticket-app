@@ -60,12 +60,14 @@ orderSchema.statics.build = async (atts: OrderAttrs) => {
     const expiresInMs = 15 * 60 * 1000; // 15min
     const expiresAt = new Date(Date.now() + expiresInMs);
     const order = new Order({
-        expiresAt,
-        ...atts
+        ...atts,
+        expiresAt
     });
 
     await order.save();
-}
+
+    return order;
+};
 
 const Order = mongoose.model<OrderSchema, OrderStatics>("Order", orderSchema);
 
