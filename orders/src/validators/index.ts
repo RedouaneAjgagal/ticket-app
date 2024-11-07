@@ -1,5 +1,7 @@
 import createTicketValidator from "./createOrderValidator";
+import getSIngleOrderValidator from "./getSIngleOrderValidator";
 
 export {
-    createTicketValidator
+    createTicketValidator,
+    getSIngleOrderValidator
 }

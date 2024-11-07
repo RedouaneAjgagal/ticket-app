@@ -1,4 +1,6 @@
 import { RequestHandler } from "express";
+import { Order } from "../models";
+import { BadRequestError, UnauthenticatedError, Unauthorized } from "@redagtickets/common";
 
 /**
  * get user's order details controller
@@ -6,7 +8,19 @@ import { RequestHandler } from "express";
  * @param res 
  */
 const getSingleOrderController: RequestHandler = async (req, res) => {
-    res.sendStatus(200);
+    const { orderId } = req.params;
+
+    const order = await Order.findById(orderId).populate("ticket");
+    if (!order) {
+        throw new BadRequestError("Invalid order ID");
+    };
+
+    const isBelongToCurrentUser = order.userId === req.user!.id;
+    if (!isBelongToCurrentUser) {
+        throw new Unauthorized();
+    }
+
+    res.status(200).json(order);
 };
 
 export default getSingleOrderController;
