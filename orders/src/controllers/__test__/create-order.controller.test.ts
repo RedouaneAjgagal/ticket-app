@@ -2,7 +2,9 @@ import request from "supertest";
 import app from "../../app";
 import mongoose from "mongoose";
 import { Order, Ticket } from "../../models";
-import { OrderStatus } from "@redagtickets/common";
+import { OrderStatus, Subjects } from "@redagtickets/common";
+
+import natsWrapper from "../../nats-wrapper";
 
 const ticketId = new mongoose.Types.ObjectId();
 
@@ -74,7 +76,7 @@ it("should return 201 if an order has been created and stored in the database", 
     expect(orders.length).toEqual(INITIAL_NUM_ORDERS);
 
     const ticket = await Ticket.build({
-        title: "a titcket title",
+        title: "a ticket title",
         price: 10
     });
 
@@ -86,4 +88,22 @@ it("should return 201 if an order has been created and stored in the database", 
 
     orders = await Order.find({});
     expect(orders.length).toEqual(INITIAL_NUM_ORDERS + 1);
+});
+
+it("should publish a created order event", async () => {
+    const { cookie } = global.signin();
+
+    const ticket = await Ticket.build({
+        title: "a ticket title",
+        price: 10
+    });
+
+    await request(app)
+        .post("/api/orders")
+        .set("Cookie", cookie)
+        .send({ ticketId: ticket.id })
+        .expect(201);
+
+    expect(natsWrapper.stan.publish).toHaveBeenCalled();
+    expect(natsWrapper.stan.publish).toHaveBeenCalledWith(Subjects.OrderCreated, expect.anything(), expect.anything());
 });
