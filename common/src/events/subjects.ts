@@ -1,6 +1,11 @@
 enum Subjects {
+    // tickets
     TicketCreated = "ticket:created",
-    TicketUpdated = "ticket:updated"
+    TicketUpdated = "ticket:updated",
+
+    // orders
+    OrderCreated = "order:created",
+    OrderCancelled = "order:cancelled"
 };
 
 export default Subjects;
