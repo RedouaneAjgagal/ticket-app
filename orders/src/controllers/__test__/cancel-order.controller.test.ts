@@ -2,7 +2,8 @@ import request from "supertest";
 import app from "../../app";
 import mongoose from "mongoose";
 import { Ticket } from "../../models";
-import { OrderStatus } from "@redagtickets/common";
+import { OrderStatus, Subjects } from "@redagtickets/common";
+import natsWrapper from "../../nats-wrapper";
 
 it("should return a 401 if the user is not signed in", async () => {
     const orderId = new mongoose.Types.ObjectId();
@@ -91,4 +92,28 @@ it("should cancel the order", async () => {
     expect(response.body.status).toEqual(OrderStatus.Cancelled);
 });
 
-it.todo("need to emits an order cancelled event");
+it("should emits an order cancelled event", async () => {
+    const { cookie } = global.signin();
+
+    const ticket = await Ticket.build({
+        title: "a ticket",
+        price: 10
+    });
+
+    const createOrderResponse = await request(app)
+        .post("/api/orders")
+        .set("Cookie", cookie)
+        .send({
+            ticketId: ticket.id
+        })
+        .expect(201);
+
+    await request(app)
+        .patch(`/api/orders/${createOrderResponse.body.id}`)
+        .set("Cookie", cookie)
+        .send()
+        .expect(200);
+
+    expect(natsWrapper.stan.publish).toHaveBeenCalled();
+    expect(natsWrapper.stan.publish).toHaveBeenCalledWith(Subjects.OrderCancelled, expect.anything(), expect.anything());
+});
