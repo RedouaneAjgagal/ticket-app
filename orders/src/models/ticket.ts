@@ -14,6 +14,7 @@ interface BuildTicketAttrsWithId extends TicketAttrs {
 export interface TicketDoc extends mongoose.Document<mongoose.Types.ObjectId> {
     title: string;
     price: number;
+    __v: number;
     isReserved: () => Promise<boolean>;
 };
 
