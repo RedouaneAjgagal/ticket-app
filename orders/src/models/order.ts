@@ -47,12 +47,12 @@ const orderSchema = new mongoose.Schema<OrderSchema>({
     }
 }, {
     timestamps: true,
+    optimisticConcurrency: true,
     toJSON: {
         transform(doc, ret) {
             ret.id = ret._id;
             delete ret._id;
-        },
-        versionKey: false
+        }
     }
 });
 
