@@ -28,6 +28,7 @@ const start = async () => {
         process.on("SIGTERM", () => natsWrapper.stan.close());
 
         new listener.TicketCreatedListener(natsWrapper.stan).listen();
+        new listener.TicketUpdatedListener(natsWrapper.stan).listen();
 
         await mongoose.connect(process.env.MONGO_URI);
         console.log("Orders mongo is connected!");
