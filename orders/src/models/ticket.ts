@@ -7,6 +7,10 @@ interface TicketAttrs {
     price: number;
 };
 
+interface BuildTicketAttrsWithId extends TicketAttrs {
+    id?: string;
+};
+
 export interface TicketDoc extends mongoose.Document<mongoose.Types.ObjectId> {
     title: string;
     price: number;
@@ -14,7 +18,7 @@ export interface TicketDoc extends mongoose.Document<mongoose.Types.ObjectId> {
 };
 
 interface TicketStatics extends mongoose.Model<TicketDoc> {
-    build(attrs: TicketAttrs): Promise<TicketDoc>;
+    build(attrs: BuildTicketAttrsWithId): Promise<TicketDoc>;
 };
 
 const ticketSchema = new mongoose.Schema<TicketAttrs>({
@@ -33,13 +37,22 @@ const ticketSchema = new mongoose.Schema<TicketAttrs>({
             ret.id = ret._id;
             delete ret._id;
         },
-        versionKey: false
-    }
+    },
+    optimisticConcurrency: true
 });
 
 // statics
-ticketSchema.statics.build = async (attrs: TicketAttrs) => {
-    const ticket = new Ticket(attrs);
+ticketSchema.statics.build = async (attrs: BuildTicketAttrsWithId) => {
+    const ticketDetails: TicketAttrs & { _id?: string } = {
+        title: attrs.title,
+        price: attrs.price
+    };
+
+    if (attrs.id) {
+        ticketDetails._id = attrs.id;
+    };
+
+    const ticket = new Ticket(ticketDetails);
     await ticket.save();
 
     return ticket;
