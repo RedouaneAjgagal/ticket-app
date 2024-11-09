@@ -17,6 +17,7 @@ const createTicketController: RequestHandler = async (req, res) => {
     });
 
     new publishers.TicketCreatedPublisher(natsWrapper.stan).publish({
+        __v: ticket.__v,
         id: ticket.id,
         title: ticket.title,
         price: ticket.price,

@@ -29,6 +29,7 @@ const createOrderController: RequestHandler = async (req, res) => {
     });
 
     new publisher.OrderCreatedPublisher(natsWrapper.stan).publish({
+        __v: order.__v,
         id: order.id,
         status: order.status,
         expiresAt: order.expiresAt.toISOString(),

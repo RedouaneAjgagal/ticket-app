@@ -33,6 +33,7 @@ const updateTicketController: RequestHandler = async (req, res) => {
     await ticket.save();
 
     new TicketUpdatedPublisher(natsWrapper.stan).publish({
+        __v: ticket.__v,
         id: ticket.id,
         title: ticket.title,
         price: ticket.price,
