@@ -8,6 +8,7 @@ export default class TicketCreatedListener extends Listener<TicketCreatedEvent> 
     qGroup = qGroup;
     async onMessage(data: TicketCreatedEvent["data"], msg: Message) {
         const ticket = await Ticket.build({
+            __v: data.__v,
             id: data.id,
             title: data.title,
             price: data.price

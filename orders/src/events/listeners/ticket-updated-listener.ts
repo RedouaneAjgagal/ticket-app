@@ -7,14 +7,15 @@ export default class TicketUpdatedListener extends Listener<TicketUpdatedEvent> 
     readonly subject = Subjects.TicketUpdated;
     qGroup = qGroup;
     async onMessage(data: TicketUpdatedEvent["data"], msg: Message) {
-        const { id, title, price } = data;
+        const { title, price, __v } = data;
 
-        const ticket = await Ticket.findById(id);
-        if (!ticket) {
-            throw new Error("Found no ticket");
+        const ticket = await Ticket.findByEvent(data);
+
+        if (typeof ticket === "string") {
+            throw new Error(ticket);
         };
 
-        ticket.set({ title, price });
+        ticket.set({ title, price, __v });
         await ticket.save();
 
         console.log({ ticket: ticket.toJSON() });
