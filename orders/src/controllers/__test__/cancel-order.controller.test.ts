@@ -39,6 +39,7 @@ it("should return 403 if the user doesn't own the order", async () => {
     const { cookie } = global.signin();
 
     const ticket = await Ticket.build({
+        __v: 0,
         title: "a ticket",
         price: 10
     });
@@ -62,6 +63,7 @@ it("should cancel the order", async () => {
     const { cookie } = global.signin();
 
     const ticket = await Ticket.build({
+        __v: 0,
         title: "a ticket",
         price: 10
     });
@@ -96,6 +98,7 @@ it("should emits an order cancelled event", async () => {
     const { cookie } = global.signin();
 
     const ticket = await Ticket.build({
+        __v: 0,
         title: "a ticket",
         price: 10
     });

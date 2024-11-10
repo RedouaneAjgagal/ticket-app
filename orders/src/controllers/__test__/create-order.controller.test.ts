@@ -47,6 +47,7 @@ it("should return a 400 if the ticket is already reserved", async () => {
     const { cookie } = global.signin();
 
     const ticket = await Ticket.build({
+        __v: 0,
         title: "a ticket title",
         price: 10
     });
@@ -76,6 +77,7 @@ it("should return 201 if an order has been created and stored in the database", 
     expect(orders.length).toEqual(INITIAL_NUM_ORDERS);
 
     const ticket = await Ticket.build({
+        __v: 0,
         title: "a ticket title",
         price: 10
     });
@@ -94,6 +96,7 @@ it("should publish a created order event", async () => {
     const { cookie } = global.signin();
 
     const ticket = await Ticket.build({
+        __v: 0,
         title: "a ticket title",
         price: 10
     });

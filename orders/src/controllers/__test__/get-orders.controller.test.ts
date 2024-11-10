@@ -4,6 +4,7 @@ import { Ticket } from "../../models";
 
 const createTicketHandler = async () => {
     const ticket = await Ticket.build({
+        __v: 0,
         title: `a ticket title`,
         price: 10
     });
