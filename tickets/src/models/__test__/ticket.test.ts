@@ -4,7 +4,8 @@ it("should implements optimistic Concurrency control", async () => {
     const ticket = await Ticket.build({
         userId: "123",
         title: "a ticket",
-        price: 10
+        price: 10,
+        orders: []
     });
 
     const firstInstance = await Ticket.findById(ticket.id);
@@ -27,7 +28,8 @@ it('should increment the version number on each save', async () => {
     const ticket = await Ticket.build({
         userId: "123",
         title: "first ticket",
-        price: 10
+        price: 10,
+        orders: []
     });
 
     expect(ticket.__v).toEqual(0);

@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { Ticket } from "../models";
-import { publishers } from "../events";
+import { publisher } from "../events";
 import natsWrapper from "../nats-wrapper";
 
 /**
@@ -13,10 +13,11 @@ const createTicketController: RequestHandler = async (req, res) => {
     const ticket = await Ticket.build({
         title,
         price,
-        userId: req.user!.id
+        userId: req.user!.id,
+        orders: []
     });
 
-    new publishers.TicketCreatedPublisher(natsWrapper.stan).publish({
+    new publisher.TicketCreatedPublisher(natsWrapper.stan).publish({
         __v: ticket.__v,
         id: ticket.id,
         title: ticket.title,
