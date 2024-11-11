@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 interface TicketAttrs {
     title: string;
     price: number;
+    orders: string[];
     userId: string;
 };
 
@@ -11,6 +12,7 @@ interface TicketDoc extends mongoose.Document<mongoose.Types.ObjectId> {
     title: string;
     price: number;
     userId: string;
+    orders: string[];
     createdAt: string;
     updatedAt: string;
 };
@@ -33,6 +35,9 @@ const ticketSchema = new mongoose.Schema<TicketAttrs>({
     userId: {
         type: String,
         required: [true, "Must provide the user ID"]
+    },
+    orders: {
+        type: []
     }
 }, {
     timestamps: true,
