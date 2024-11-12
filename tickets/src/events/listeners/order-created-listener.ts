@@ -2,6 +2,7 @@ import { Listener, OrderCreatedEvent, Subjects } from "@redagtickets/common";
 import qGroup from "./qGroup";
 import { Message } from "node-nats-streaming";
 import { Ticket } from "../../models";
+import TicketUpdatedPublisher from "../publishers/ticket-updated-publisher";
 
 export default class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     readonly subject = Subjects.OrderCreated;
@@ -14,6 +15,15 @@ export default class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 
         ticket.orders = [...ticket.orders, data.id];
         await ticket.save();
+
+        await new TicketUpdatedPublisher(this.stan).publish({
+            __v: ticket.__v,
+            id: ticket.id,
+            price: ticket.price,
+            title: ticket.title,
+            userId: ticket.userId,
+            orders: ticket.orders
+        });
 
         msg.ack();
     }
