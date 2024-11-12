@@ -49,7 +49,8 @@ it("should return a 400 if the ticket is already reserved", async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket title",
-        price: 10
+        price: 10,
+        orders: []
     });
 
     await Order.build({
@@ -79,7 +80,8 @@ it("should return 201 if an order has been created and stored in the database", 
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket title",
-        price: 10
+        price: 10,
+        orders: []
     });
 
     await request(app)
@@ -98,7 +100,8 @@ it("should publish a created order event", async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket title",
-        price: 10
+        price: 10,
+        orders: []
     });
 
     await request(app)

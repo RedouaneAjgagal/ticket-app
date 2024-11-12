@@ -6,6 +6,7 @@ interface TicketAttrs {
     __v: number;
     title: string;
     price: number;
+    orders: string[];
 };
 
 interface BuildTicketAttrsWithId extends TicketAttrs {
@@ -16,6 +17,7 @@ export interface TicketDoc extends mongoose.Document<mongoose.Types.ObjectId> {
     __v: number;
     title: string;
     price: number;
+    orders: string[];
     isReserved: () => Promise<boolean>;
 };
 
@@ -33,6 +35,9 @@ const ticketSchema = new mongoose.Schema<TicketAttrs>({
         type: Number,
         min: 0,
         required: [true, "Ticket price is required"]
+    },
+    orders: {
+        type: []
     }
 }, {
     toJSON: {
@@ -49,6 +54,7 @@ ticketSchema.statics.build = async (attrs: BuildTicketAttrsWithId) => {
         __v: attrs.__v,
         title: attrs.title,
         price: attrs.price,
+        orders: attrs.orders
     };
 
     if (attrs.id) {

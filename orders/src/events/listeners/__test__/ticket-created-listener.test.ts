@@ -13,7 +13,8 @@ const setup = async () => {
         id: new mongoose.Types.ObjectId().toHexString(),
         title: "a ticket",
         price: 10,
-        userId: new mongoose.Types.ObjectId().toHexString()
+        userId: new mongoose.Types.ObjectId().toHexString(),
+        orders: []
     };
 
     const msg: Partial<Message> = {

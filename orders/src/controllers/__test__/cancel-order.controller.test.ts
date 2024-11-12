@@ -41,7 +41,8 @@ it("should return 403 if the user doesn't own the order", async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket",
-        price: 10
+        price: 10,
+        orders: []
     });
 
     const createOrderResponse = await request(app)
@@ -65,7 +66,8 @@ it("should cancel the order", async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket",
-        price: 10
+        price: 10,
+        orders: []
     });
 
     const createOrderResponse = await request(app)
@@ -100,7 +102,8 @@ it("should emits an order cancelled event", async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket",
-        price: 10
+        price: 10,
+        orders: []
     });
 
     const createOrderResponse = await request(app)

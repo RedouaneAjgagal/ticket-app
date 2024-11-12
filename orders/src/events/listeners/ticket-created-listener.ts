@@ -11,7 +11,8 @@ export default class TicketCreatedListener extends Listener<TicketCreatedEvent> 
             __v: data.__v,
             id: data.id,
             title: data.title,
-            price: data.price
+            price: data.price,
+            orders: data.orders
         });
         
         console.log({ ticket: ticket.toJSON() });
