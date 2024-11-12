@@ -8,5 +8,6 @@ export default interface TicketUpdatedEvent {
         title: string;
         price: number;
         userId: string;
+        orders: string[];
     };
 };
