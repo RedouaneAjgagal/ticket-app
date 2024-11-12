@@ -9,8 +9,7 @@ const setup = async (skipVersion = 0) => {
     const newTicket = await Ticket.build({
         __v: 0,
         title: "a ticket",
-        price: 10,
-        orders: []
+        price: 10
     });
 
     const listener = new TicketUpdatedListener(natsWrapper.stan);
@@ -21,7 +20,7 @@ const setup = async (skipVersion = 0) => {
         title: "updated ticket",
         price: 99,
         userId: new mongoose.Types.ObjectId().toHexString(),
-        orders: newTicket.orders
+        orders: []
     };
 
     const msg: Partial<Message> = {

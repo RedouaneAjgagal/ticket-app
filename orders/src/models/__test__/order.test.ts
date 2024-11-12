@@ -6,8 +6,7 @@ it("should implements optimistic Concurrency control", async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket",
-        price: 10,
-        orders: []
+        price: 10
     });
 
     const order = await Order.build({
@@ -36,8 +35,7 @@ it('should increment the version number on each save', async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "first ticket",
-        price: 10,
-        orders: []
+        price: 10
     });
 
     const order = await Order.build({

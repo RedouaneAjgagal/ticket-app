@@ -39,8 +39,7 @@ it("should return 403 if the order is not belong to the current user", async () 
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket",
-        price: 10,
-        orders: []
+        price: 10
     });
 
     const createOrderResponse = await request(app)
@@ -64,8 +63,7 @@ it("should return the order details", async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket",
-        price: 10,
-        orders: []
+        price: 10
     });
 
     const createOrderResponse = await request(app)
@@ -92,8 +90,7 @@ it("should populate the ticket data from the order", async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: "a ticket",
-        price: 10,
-        orders: []
+        price: 10
     });
 
     const createOrderResponse = await request(app)

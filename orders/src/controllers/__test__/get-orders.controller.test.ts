@@ -6,8 +6,7 @@ const createTicketHandler = async () => {
     const ticket = await Ticket.build({
         __v: 0,
         title: `a ticket title`,
-        price: 10,
-        orders: []
+        price: 10
     });
 
     return ticket;
