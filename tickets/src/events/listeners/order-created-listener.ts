@@ -16,7 +16,7 @@ export default class OrderCreatedListener extends Listener<OrderCreatedEvent> {
         ticket.orders = [...ticket.orders, data.id];
         await ticket.save();
 
-        await new TicketUpdatedPublisher(this.stan).publish({
+        new TicketUpdatedPublisher(this.stan).publish({
             __v: ticket.__v,
             id: ticket.id,
             price: ticket.price,
