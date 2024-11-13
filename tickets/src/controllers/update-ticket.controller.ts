@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { BadRequestError, UnauthenticatedError } from "@redagtickets/common";
 import TicketUpdatedPublisher from "../events/publishers/ticket-updated-publisher";
 import natsWrapper from "../nats-wrapper";
+import { publisher } from "../events";
 
 
 /**
@@ -29,16 +30,25 @@ const updateTicketController: RequestHandler = async (req, res) => {
         throw new UnauthenticatedError();
     };
 
+    if (ticket.orders.length) {
+        throw new BadRequestError("Cannot edit a reserved ticket");
+    };
+
     ticket.set({ title, price });
+    const isModified = ticket.isModified();
     await ticket.save();
 
-    new TicketUpdatedPublisher(natsWrapper.stan).publish({
-        __v: ticket.__v,
-        id: ticket.id,
-        title: ticket.title,
-        price: ticket.price,
-        userId: ticket.userId
-    });
+    if (isModified) {
+        new publisher.TicketUpdatedPublisher(natsWrapper.stan).publish({
+            __v: ticket.__v,
+            id: ticket.id,
+            title: ticket.title,
+            price: ticket.price,
+            userId: ticket.userId,
+            orders: ticket.orders
+        });
+    }
+
 
     res.status(200).json(ticket);
 }
