@@ -3,6 +3,7 @@ import app from "../../app";
 import mongoose from "mongoose";
 import natsWrapper from "../../nats-wrapper";
 import { Subjects } from "@redagtickets/common";
+import { Ticket } from "../../models";
 
 const validInputs = {
     title: "a valid ticket title",
@@ -113,6 +114,28 @@ it("should retun a 400 if its invalid inputs", async () => {
             title: validInputs.title,
             price: invalidInputs.price
         })
+        .expect(400);
+});
+
+it('should return a 400 if the ticket is already reserved', async () => {
+    const { cookie } = global.signin();
+
+    const createTicketResponse = await request(app)
+        .post("/api/tickets")
+        .set("Cookie", cookie)
+        .send(validInputs)
+        .expect(201);
+
+    const ticket = await Ticket.findById(createTicketResponse.body.id);
+    expect(ticket).not.toBe(null);
+
+    ticket!.orders.push(new mongoose.Types.ObjectId().toHexString());
+    await ticket?.save();
+
+    await request(app)
+        .put(`/api/tickets/${createTicketResponse.body.id}`)
+        .set("Cookie", cookie)
+        .send(validInputs)
         .expect(400);
 });
 
