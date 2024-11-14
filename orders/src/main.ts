@@ -29,6 +29,7 @@ const start = async () => {
 
         new listener.TicketCreatedListener(natsWrapper.stan).listen();
         new listener.TicketUpdatedListener(natsWrapper.stan).listen();
+        new listener.ExpirationCompletedListener(natsWrapper.stan).listen();
 
         await mongoose.connect(process.env.MONGO_URI);
         console.log("Orders mongo is connected!");
@@ -37,7 +38,7 @@ const start = async () => {
     };
 
     app.listen(PORT, () => {
-        console.log(`Tickets server is running on port ${PORT}`);
+        console.log(`Orders server is running on port ${PORT}`);
     });
 }
 

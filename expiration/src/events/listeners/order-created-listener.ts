@@ -7,12 +7,7 @@ export default class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     readonly subject = Subjects.OrderCreated;
     qGroup = qGroup;
     async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
-        console.log({ data });
-
         const delay = new Date(data.expiresAt).getTime() - new Date(Date.now()).getTime();
-
-        console.log(`need to wait ${delay / (1000 * 60)} min`);
-        
 
         await expirationQueue.add({
             orderId: data.id

@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { Order } from "../models";
-import { BadRequestError, OrderStatus, Unauthorized } from "@redagtickets/common";
+import { BadRequestError, OrderStatus, UnauthorizedError } from "@redagtickets/common";
 import { publisher } from "../events";
 import natsWrapper from "../nats-wrapper";
 
@@ -19,7 +19,7 @@ const cancelOrderController: RequestHandler = async (req, res) => {
 
     const isOrderBelongToUser = order.userId === req.user!.id;
     if (!isOrderBelongToUser) {
-        throw new Unauthorized();
+        throw new UnauthorizedError();
     };
 
     order.status = OrderStatus.Cancelled;

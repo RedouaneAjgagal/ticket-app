@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { Order } from "../models";
-import { BadRequestError, UnauthenticatedError, Unauthorized } from "@redagtickets/common";
+import { BadRequestError, UnauthorizedError } from "@redagtickets/common";
 
 /**
  * get user's order details controller
@@ -17,7 +17,7 @@ const getSingleOrderController: RequestHandler = async (req, res) => {
 
     const isBelongToCurrentUser = order.userId === req.user!.id;
     if (!isBelongToCurrentUser) {
-        throw new Unauthorized();
+        throw new UnauthorizedError();
     }
 
     res.status(200).json(order);
