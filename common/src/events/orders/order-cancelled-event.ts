@@ -6,6 +6,7 @@ export default interface OrderCancelledEvent {
     data: {
         __v: number;
         id: string;
+        userId: string;
         status: OrderStatus;
         expiresAt: string;
         ticket: {
@@ -13,5 +14,6 @@ export default interface OrderCancelledEvent {
             title: string;
             price: number;
         };
+        createdAt: string;
     };
 };
