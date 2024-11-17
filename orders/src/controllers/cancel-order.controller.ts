@@ -28,13 +28,15 @@ const cancelOrderController: RequestHandler = async (req, res) => {
     new publisher.OrderCancelledPublisher(natsWrapper.stan).publish({
         __v: order.__v,
         id: order.id,
+        userId: order.userId,
         status: order.status,
         expiresAt: order.expiresAt.toISOString(),
         ticket: {
             id: order.ticket.id,
             title: order.ticket.title,
             price: order.ticket.price
-        }
+        },
+        createdAt: order.createdAt
     });
 
     res.status(200).json(order);

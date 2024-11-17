@@ -31,13 +31,15 @@ const createOrderController: RequestHandler = async (req, res) => {
     new publisher.OrderCreatedPublisher(natsWrapper.stan).publish({
         __v: order.__v,
         id: order.id,
+        userId: order.userId,
         status: order.status,
         expiresAt: order.expiresAt.toISOString(),
         ticket: {
             id: ticket.id,
             title: ticket.title,
             price: ticket.price
-        }
+        },
+        createdAt: order.createdAt
     });
 
     res.status(201).json(order);

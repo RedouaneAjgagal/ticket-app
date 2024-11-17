@@ -19,13 +19,15 @@ const setup = async () => {
     const data: OrderCreatedEvent["data"] = {
         __v: 0,
         id: new mongoose.Types.ObjectId().toHexString(),
+        userId: new mongoose.Types.ObjectId().toHexString(),
         expiresAt: new Date(Date.now() + (15 * 60 * 1000)).toISOString(),
         status: OrderStatus.Created,
         ticket: {
             id: newTicket.id,
             title: newTicket.title,
             price: newTicket.price
-        }
+        },
+        createdAt: new Date().toISOString()
     };
 
     const msg: Partial<Message> = {

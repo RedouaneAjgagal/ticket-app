@@ -20,13 +20,15 @@ const setup = async () => {
     const data: OrderCancelledEvent["data"] = {
         __v: 1,
         id: orderId,
+        userId: new mongoose.Types.ObjectId().toHexString(),
         expiresAt: new Date(Date.now() + (15 * 60 * 1000)).toISOString(),
         status: OrderStatus.Cancelled,
         ticket: {
             id: newTicket.id,
             title: newTicket.title,
             price: newTicket.price
-        }
+        },
+        createdAt: new Date().toISOString()
     };
 
     const msg: Partial<Message> = {

@@ -24,12 +24,14 @@ export default class ExpirationCompletedListener extends Listener<ExpirationComp
                 __v: order.__v,
                 expiresAt: order.expiresAt.toISOString(),
                 id: order.id,
+                userId: order.userId,
                 status: order.status,
                 ticket: {
                     id: order.ticket.id,
                     title: order.ticket.title,
                     price: order.ticket.price
-                }
+                },
+                createdAt: order.createdAt
             });
         };
 
