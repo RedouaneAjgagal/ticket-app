@@ -61,7 +61,10 @@ const orderSchema = new mongoose.Schema<OrderAttrs>({
 });
 
 orderSchema.statics.build = async (attrs: OrderAttrs) => {
-    const order = new Order(attrs);
+    const order = new Order({
+        ...attrs,
+        _id: attrs.id
+    });
     await order.save();
 
     return order;
