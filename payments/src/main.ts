@@ -11,6 +11,7 @@ const start = async () => {
     if (!process.env.NATS_CLUSTER_ID) throw new Error("NATS_CLUSTER_ID is required");
     if (!process.env.NATS_CLIENT_ID) throw new Error("NATS_CLIENT_ID is required");
     if (!process.env.NATS_URL) throw new Error("NATS_URL is required");
+    if (!process.env.STRIPE_KEY) throw new Error("STRIPE_KEY is required");
 
     try {
         await natsWrapper.connect(
