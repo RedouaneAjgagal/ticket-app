@@ -21,10 +21,17 @@ interface OrderDoc extends mongoose.Document<mongoose.Types.ObjectId> {
         id: string;
         price: number;
     };
+    createdAt: Date;
+};
+
+interface IFindByEvent {
+    orderId: string;
+    __v: number
 };
 
 interface OrderStatics extends mongoose.Model<OrderDoc> {
     build(attrs: OrderAttrs): Promise<OrderDoc>;
+    findByEvent(attrs: IFindByEvent): Promise<OrderDoc | string>;
 };
 
 const orderSchema = new mongoose.Schema<OrderAttrs>({
@@ -66,6 +73,20 @@ orderSchema.statics.build = async (attrs: OrderAttrs) => {
         _id: attrs.id
     });
     await order.save();
+
+    return order;
+};
+
+orderSchema.statics.findByEvent = async ({ orderId, __v }: IFindByEvent) => {
+    const order = await Order.findById(orderId);
+    if (!order) {
+        return "Found no order";
+    };
+
+    const isNextEvent = order.__v + 1 === __v;
+    if (!isNextEvent) {
+        return "Out of order";
+    };
 
     return order;
 };

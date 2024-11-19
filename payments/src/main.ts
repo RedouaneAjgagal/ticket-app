@@ -28,6 +28,7 @@ const start = async () => {
         process.on("SIGTERM", () => natsWrapper.stan.close());
 
         new listener.OrderCreatedListener(natsWrapper.stan).listen();
+        new listener.OrderCancelledListener(natsWrapper.stan).listen();
 
         await mongoose.connect(process.env.MONGO_URI);
         console.log("Payments mongo is connected!");
