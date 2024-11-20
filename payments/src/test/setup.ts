@@ -7,10 +7,12 @@ declare global {
     var signin: () => {
         cookie: string[];
         email: string;
+        userId: string;
     };
 }
 
 jest.mock("../nats-wrapper");
+jest.mock("../stripe");
 
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
@@ -76,6 +78,7 @@ global.signin = () => {
 
     return {
         cookie: [`access_token=${signedCookie}`],
-        email: userInformation.email
+        email: userInformation.email,
+        userId: payload.id
     };
 }
