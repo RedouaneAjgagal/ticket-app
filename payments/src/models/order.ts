@@ -13,7 +13,7 @@ interface OrderAttrs {
     createdAt: Date;
 };
 
-interface OrderDoc extends mongoose.Document<mongoose.Types.ObjectId> {
+export interface OrderDoc extends mongoose.Document<mongoose.Types.ObjectId> {
     __v: number;
     userId: string;
     status: OrderStatus;
