@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import { Order, Payment } from "../models";
 import { BadRequestError, OrderStatus, UnauthorizedError } from "@redagtickets/common";
 import stripe from "../stripe";
+import { publisher } from "../events";
+import natsWrapper from "../nats-wrapper";
 
 
 /**
@@ -38,6 +40,13 @@ const newPaymentController: RequestHandler = async (req, res) => {
     const payment = await Payment.build({
         order: order.id,
         chargeId: charge.id
+    });
+
+    new publisher.PaymentCreatedPublisher(natsWrapper.stan).publish({
+        __v: payment.__v,
+        id: payment.id,
+        chargeId: payment.chargeId,
+        orderId: payment.order._id.toHexString()
     });
 
     res.status(201).json({ id: payment.id });
