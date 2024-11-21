@@ -7,6 +7,7 @@ import OrderCreatedEvent from "./orders/order-created-event";
 import OrderCancelledEvent from "./orders/order-cancelled-event";
 import OrderStatus from "./types/order-status";
 import ExpirationCompletedEvent from "./expiration/expiration-completed-event";
+import PaymentCreatedEvent from "./payments/payment-created-event";
 
 export {
     Subjects,
@@ -17,5 +18,6 @@ export {
     OrderCreatedEvent,
     OrderCancelledEvent,
     OrderStatus,
-    ExpirationCompletedEvent
+    ExpirationCompletedEvent,
+    PaymentCreatedEvent
 }
