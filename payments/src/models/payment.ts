@@ -3,13 +3,13 @@ import { OrderDoc } from "./order";
 
 interface PaymentAttrs {
     order: OrderDoc;
-    stripeId: string;
+    chargeId: string;
 };
 
 interface PaymentDoc extends mongoose.Document<mongoose.Types.ObjectId> {
     __v: number;
     order: OrderDoc;
-    stripeId: string;
+    chargeId: string;
     createdAt: string;
     updatedAt: string;
 };
@@ -24,9 +24,9 @@ const paymentSchema = new mongoose.Schema<PaymentAttrs>({
         ref: "Order",
         required: true
     },
-    stripeId: {
+    chargeId: {
         type: String,
-        required: [true, "Stripe ID is required"]
+        required: [true, "ChargeId ID is required"]
     }
 }, {
     timestamps: true,

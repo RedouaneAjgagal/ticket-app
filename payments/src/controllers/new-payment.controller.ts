@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { Order } from "../models";
+import { Order, Payment } from "../models";
 import { BadRequestError, OrderStatus, UnauthorizedError } from "@redagtickets/common";
 import stripe from "../stripe";
 
@@ -28,14 +28,19 @@ const newPaymentController: RequestHandler = async (req, res) => {
         throw new BadRequestError("Unable to charge this order");
     }
 
-    await stripe.charges.create({
+    const charge = await stripe.charges.create({
         amount: order.ticket.price * 100,
         currency: "usd",
         source: token,
         description: "purchasing a ticket"
     });
 
-    res.status(201).json({ success: true });
+    const payment = await Payment.build({
+        order: order.id,
+        chargeId: charge.id
+    });
+
+    res.status(201).json({ id: payment.id });
 }
 
 export default newPaymentController;
