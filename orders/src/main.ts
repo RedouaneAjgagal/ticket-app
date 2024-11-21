@@ -30,6 +30,7 @@ const start = async () => {
         new listener.TicketCreatedListener(natsWrapper.stan).listen();
         new listener.TicketUpdatedListener(natsWrapper.stan).listen();
         new listener.ExpirationCompletedListener(natsWrapper.stan).listen();
+        new listener.PaymentCreatedListener(natsWrapper.stan).listen();
 
         await mongoose.connect(process.env.MONGO_URI);
         console.log("Orders mongo is connected!");
