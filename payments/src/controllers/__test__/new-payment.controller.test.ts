@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../app";
 import mongoose from "mongoose";
-import { Order } from "../../models";
+import { Order, Payment } from "../../models";
 import { OrderStatus } from "@redagtickets/common";
 import stripe from "../../stripe";
 
@@ -135,4 +135,45 @@ it('should create a charge', async () => {
         source: paymentBody.token,
         description: "purchasing a ticket"
     });
+});
+
+it('should create a new payment in the db', async () => {
+    const { userId, cookie } = global.signin();
+
+    const INITIAL_START_PAYMENTS = 0;
+
+    let payments = await Payment.find({});
+    expect(payments.length).toEqual(INITIAL_START_PAYMENTS);
+
+    const order = await Order.build({
+        __v: 0,
+        createdAt: new Date(),
+        id: new mongoose.Types.ObjectId().toHexString(),
+        status: OrderStatus.Created,
+        ticket: {
+            id: new mongoose.Types.ObjectId().toHexString(),
+            price: 10
+        },
+        userId
+    });
+
+    const response = await request(app)
+        .post("/api/payments")
+        .set("Cookie", cookie)
+        .send({
+            token: paymentBody.token,
+            orderId: order.id
+        })
+        .expect(201);
+
+    payments = await Payment.find({});
+    expect(payments.length).toEqual(INITIAL_START_PAYMENTS + 1);
+    
+    const payment = payments[0];
+    expect(payment.id).toEqual(response.body.id);
+    expect(payment.order.toJSON()).toEqual(order.id);
+    expect(payment.chargeId).toBeDefined();
+
+    console.log(payment.chargeId);
+    
 });
