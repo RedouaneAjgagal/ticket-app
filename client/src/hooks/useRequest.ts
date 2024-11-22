@@ -17,7 +17,7 @@ interface UseRequestWithPayload {
 type UseRequestPayload = UseRequestWithoutPayload | UseRequestWithPayload;
 
 
-interface ErrorResponse { message: string; field?: string };
+export interface ErrorResponse { message: string; field?: string };
 
 
 const useRequest = <T>(payload: UseRequestPayload) => {
