@@ -42,7 +42,7 @@ function Home(props: React.PropsWithoutRef<IHome>) {
                 <tr key={ticket.id}>
                   <td className="border-y border-slate-400 py-1 px-3">{ticket.title}</td>
                   <td className="border-y border-slate-400 py-1 px-3">${ticket.price.toFixed(2)}</td>
-                  <td className="border-y border-slate-400 py-1 px-3">{new Date(ticket.createdAt).toLocaleString()}</td>
+                  <td className="border-y border-slate-400 py-1 px-3">{new Date(ticket.createdAt).toLocaleDateString()}</td>
                   <td className="border-y border-slate-400 py-1 px-3"><Link className="text-blue-500" href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>View</Link></td>
                 </tr>
               ))}
