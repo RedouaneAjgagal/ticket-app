@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { newPaymentController } from "../controllers";
+import { createPaymentIntentController, newPaymentController } from "../controllers";
 import { authentication } from "@redagtickets/common";
-import { newPaymentValidator } from "../validators";
+import { createPaymentIntentValidator, newPaymentValidator } from "../validators";
 
 const router = Router();
 
 router.post("/", authentication, ...newPaymentValidator(), newPaymentController);
+router.post("/create-payment-intent", authentication, ...createPaymentIntentValidator(), createPaymentIntentController);
 
 export default router;
