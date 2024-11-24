@@ -57,7 +57,7 @@ const CheckoutForm = (props: React.PropsWithoutRef<ICheckForm>) => {
 
                 setTimeout(() => {
                     setIsSucces(false);
-                    router.push("/");
+                    router.push("/orders");
                 }, 3000);
             }
         };

@@ -6,6 +6,7 @@ const Navigation = (props: React.PropsWithoutRef<ICurrentUser>) => {
     const links = [
         { href: "/auth/signin", label: "Sign In", isVisible: !props.user },
         { href: "/auth/signup", label: "Sign Up", isVisible: !props.user },
+        { href: "/orders", label: "Orders", isVisible: props.user },
         { href: "/auth/signout", label: "Sign Out", isVisible: props.user }
     ]
 
