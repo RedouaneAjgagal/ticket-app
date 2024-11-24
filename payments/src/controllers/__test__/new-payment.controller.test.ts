@@ -7,7 +7,7 @@ import stripe from "../../stripe";
 import natsWrapper from "../../nats-wrapper";
 
 const paymentBody = {
-    token: "tok_visa",
+    paymentIntentId: "tok_visa",
     orderId: new mongoose.Types.ObjectId().toHexString()
 }
 
@@ -31,7 +31,7 @@ it('should provide valid inputs', async () => {
         .post("/api/payments")
         .set("Cookie", cookie)
         .send({
-            token: "tok_visa"
+            paymentIntentId: "tok_visa"
         })
         .expect(400);
 
@@ -39,7 +39,7 @@ it('should provide valid inputs', async () => {
         .post("/api/payments")
         .set("Cookie", cookie)
         .send({
-            token: "tok_visa",
+            paymentIntentId: "tok_visa",
             orderId: "invalidId"
         })
         .expect(400);
@@ -74,7 +74,7 @@ it('should the order belong to the user', async () => {
         .post("/api/payments")
         .set("Cookie", global.signin().cookie)
         .send({
-            token: paymentBody.token,
+            paymentIntentId: paymentBody.paymentIntentId,
             orderId: order.id
         })
         .expect(403);
@@ -99,7 +99,7 @@ it('should only charge orders with created status', async () => {
         .post("/api/payments")
         .set("Cookie", cookie)
         .send({
-            token: paymentBody.token,
+            paymentIntentId: paymentBody.paymentIntentId,
             orderId: order.id
         })
         .expect(400);
@@ -124,18 +124,13 @@ it('should create a charge', async () => {
         .post("/api/payments")
         .set("Cookie", cookie)
         .send({
-            token: paymentBody.token,
+            paymentIntentId: paymentBody.paymentIntentId,
             orderId: order.id
         })
         .expect(201);
 
-    expect(stripe.charges.create).toHaveBeenCalled();
-    expect(stripe.charges.create).toHaveBeenCalledWith({
-        amount: order.ticket.price * 100,
-        currency: "usd",
-        source: paymentBody.token,
-        description: "purchasing a ticket"
-    });
+    expect(stripe.paymentIntents.capture).toHaveBeenCalled();
+    expect(stripe.paymentIntents.capture).toHaveBeenCalledWith(paymentBody.paymentIntentId);
 });
 
 it('should create a new payment in the db', async () => {
@@ -162,7 +157,7 @@ it('should create a new payment in the db', async () => {
         .post("/api/payments")
         .set("Cookie", cookie)
         .send({
-            token: paymentBody.token,
+            paymentIntentId: paymentBody.paymentIntentId,
             orderId: order.id
         })
         .expect(201);
@@ -195,7 +190,7 @@ it('should publish a new payment created event', async () => {
         .post("/api/payments")
         .set("Cookie", cookie)
         .send({
-            token: paymentBody.token,
+            paymentIntentId: paymentBody.paymentIntentId,
             orderId: order.id
         })
         .expect(201);

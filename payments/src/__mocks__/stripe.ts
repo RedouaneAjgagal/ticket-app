@@ -1,4 +1,4 @@
-function generateFakeStripeChargeId() {
+function generateFakeStripeIntentId() {
     const randomString = (length: number) => {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let result = '';
@@ -8,12 +8,13 @@ function generateFakeStripeChargeId() {
         return result;
     };
 
-    return `ch_${randomString(24)}`;
+    return `pi_${randomString(24)}`;
 };
 
 const stripe = {
-    charges: {
-        create: jest.fn().mockResolvedValue({ id: generateFakeStripeChargeId() })
+    paymentIntents: {
+        capture: jest.fn().mockResolvedValue({ id: generateFakeStripeIntentId(), status: "succeeded" }),
+        create: jest.fn().mockResolvedValue({ client_secret: `${generateFakeStripeIntentId()}_secret_${generateFakeStripeIntentId().split("_")[1]}` })
     }
 };
 
