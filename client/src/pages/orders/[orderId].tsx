@@ -3,6 +3,9 @@ import { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
 import React, { useEffect, useState } from 'react'
 import { ICurrentUser } from '../_app';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { CheckoutForm } from '@/components';
 
 interface Order {
     id: string;
@@ -20,9 +23,16 @@ interface Order {
     __v: number;
 };
 
+interface PaymentIntent {
+    clientSecret: string
+};
+
 interface IShowOrder extends ICurrentUser {
     order: Order;
-}
+    clientSecret: PaymentIntent["clientSecret"];
+};
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const ShowOrder = (props: React.PropsWithoutRef<IShowOrder>) => {
     const expiresAt = new Date(props.order.expiresAt);
@@ -47,9 +57,9 @@ const ShowOrder = (props: React.PropsWithoutRef<IShowOrder>) => {
             <div className='flex flex-col gap-4 text-stone-800'>
                 <h1 className="text-xl">Time left to pay: <span className='font-medium'>{expiresInMin <= 0 ? "Has expired" : `${expiresInMin.toFixed(0)} minutes`}</span></h1>
             </div>
-            <div>
-                <button className='py-2 px-4 bg-blue-500 text-white rounded font-medium'>Pay ${props.order.ticket.price.toFixed(2)}</button>
-            </div>
+            <Elements stripe={stripePromise} options={{ clientSecret: props.clientSecret }}>
+                <CheckoutForm price={props.order.ticket.price} orderId={props.order.id} clientSecret={props.clientSecret} />
+            </Elements>
         </section>
     )
 };
@@ -59,9 +69,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const client = buildClient(context);
     const response: AxiosResponse<Order> = await client.get(`/api/orders/${orderId}`);
 
+    const paymentIntentResponse: AxiosResponse<PaymentIntent> = await client.post(`/api/payments/create-payment-intent`, {
+        orderId: response.data.id
+    });
+
     return {
         props: {
-            order: response.data
+            order: response.data,
+            clientSecret: paymentIntentResponse.data.clientSecret
         }
     }
 }

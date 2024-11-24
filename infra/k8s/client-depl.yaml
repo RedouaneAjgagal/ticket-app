@@ -19,6 +19,12 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "1000m"
+          env:
+            - name: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-publish-key
+                  key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 ---
 apiVersion: v1
 kind: Service

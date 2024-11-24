@@ -25,14 +25,17 @@ const useRequest = <T>(payload: UseRequestPayload) => {
   const [errors, setErrors] = useState<ErrorResponse[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchData = async () => {
+  const fetchData = async (fetchDataPayload = {}) => {
     try {
       setIsLoading(true);
       const response = payload.method === "get"
         ? await axios.get(payload.url)
         : await axios[payload.method](
           payload.url,
-          payload.payload
+          {
+            ...payload.payload,
+            ...fetchDataPayload
+          }
         );
       setData(response.data);
       if (payload.onSuccess) {
