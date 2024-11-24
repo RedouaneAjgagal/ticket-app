@@ -3,7 +3,7 @@ import { body } from "express-validator"
 
 const newPaymentValidator = () => {
     return validateRequest([
-        body("token")
+        body("paymentIntentId")
             .trim()
             .notEmpty()
             .withMessage("Invalid token"),

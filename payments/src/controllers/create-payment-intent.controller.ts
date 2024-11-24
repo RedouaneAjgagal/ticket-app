@@ -25,7 +25,8 @@ const createPaymentIntentController: RequestHandler = async (req, res) => {
         amount: order.ticket.price * 100,
         currency: "usd",
         description: "purchasing a ticket",
-        payment_method_types: ["card"]
+        payment_method_types: ["card"],
+        capture_method: "manual"
     });
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret });

@@ -12,7 +12,7 @@ import natsWrapper from "../nats-wrapper";
  * @param res
  */
 const newPaymentController: RequestHandler = async (req, res) => {
-    const { token, orderId } = req.body;
+    const { paymentIntentId, orderId } = req.body;
 
     const order = await Order.findById(orderId);
     if (!order) {
@@ -28,18 +28,17 @@ const newPaymentController: RequestHandler = async (req, res) => {
 
     if (!validStatusToCharge.includes(order.status)) {
         throw new BadRequestError("Unable to charge this order");
-    }
+    };
 
-    const charge = await stripe.charges.create({
-        amount: order.ticket.price * 100,
-        currency: "usd",
-        source: token,
-        description: "purchasing a ticket"
-    });
+    const capturePaymentIntent = await stripe.paymentIntents.capture(paymentIntentId);
+
+    if (capturePaymentIntent.status !== "succeeded") {
+        throw new BadRequestError("Unpaid ticket");
+    };
 
     const payment = await Payment.build({
         order: order.id,
-        chargeId: charge.id
+        chargeId: capturePaymentIntent.id
     });
 
     new publisher.PaymentCreatedPublisher(natsWrapper.stan).publish({
@@ -50,6 +49,6 @@ const newPaymentController: RequestHandler = async (req, res) => {
     });
 
     res.status(201).json({ id: payment.id });
-}
+};
 
 export default newPaymentController;
