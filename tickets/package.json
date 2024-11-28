@@ -4,6 +4,7 @@
   "main": "main.js",
   "scripts": {
     "test": "jest --watchAll --no-cache",
+    "test:ci": "jest",
     "dev": "ts-node-dev --poll src/main.ts",
     "start": "npx tsc && node dist/main.ts"
   },
